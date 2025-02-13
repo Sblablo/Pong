@@ -55,6 +55,7 @@ public class BallScript : MonoBehaviour
             rbody.linearVelocity = newVelocity;
             
             audio.resource = bouncePaddle;
+            audio.pitch = 1 + newSpeed/500;
             audio.Play();
             if (renderer.material.GetColor("_BaseColor") != Color.red)
                 renderer.material.SetColor("_BaseColor", Color.red);
@@ -66,6 +67,7 @@ public class BallScript : MonoBehaviour
         else
         {
             audio.resource = bounceWall;
+            audio.pitch = 1 + rbody.linearVelocity.magnitude/500;
             audio.Play();
         }
 
@@ -77,6 +79,7 @@ public class BallScript : MonoBehaviour
 
     private void StartForce()
     {
+        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
         transform.position = new Vector3(10.12f, 0, 0);
         rbody.linearVelocity = Vector3.zero;
         float x = Random.value < 0.5f ? -1.0f : 1.0f;
@@ -87,6 +90,7 @@ public class BallScript : MonoBehaviour
 
     public void StartForceNext(string direction)
     {
+        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
         transform.position = new Vector3(10.12f, 0, 0);
         rbody.linearVelocity = Vector3.zero;
         float x;
@@ -101,5 +105,10 @@ public class BallScript : MonoBehaviour
         }
         
         rbody.AddForce(new Vector3(x, 0, z) * startspeed);
+    }
+
+    public void SizeUp()
+    {
+        transform.localScale = new Vector3(2f, 2f, 2f);
     }
 }

@@ -9,6 +9,8 @@ public class Score : MonoBehaviour
     public GameObject leftDisplay;
     public GameObject rightDisplay;
     public GameObject winDisplay;
+    public PowerUp PowerUp;
+    public PowerDown PowerDown;
     
     private int scoreLeft = 0;
     private int scoreRight = 0;
@@ -18,6 +20,10 @@ public class Score : MonoBehaviour
         winDisplay.SetActive(false);
         leftDisplay.GetComponent<TextMeshProUGUI>().text = "0";
         rightDisplay.GetComponent<TextMeshProUGUI>().text = "0";
+        if (Random.Range(0, 2) == 0)
+            StartCoroutine(SpawnPowerUp(Random.Range(5,10)));
+        else
+            StartCoroutine(SpawnPowerDown(Random.Range(5,10)));
     }
 
     // Update is called once per frame
@@ -33,6 +39,7 @@ public class Score : MonoBehaviour
         {
             scoreLeft += 1;
             Debug.Log($"Left player scored! {scoreLeft}:{scoreRight}");
+            StartCoroutine(AnimGreen(leftDisplay));
             if (scoreLeft >= 11)
             {
                 Debug.Log($"Game Over, Left Paddle Wins! {scoreLeft}:{scoreRight}");
@@ -44,6 +51,7 @@ public class Score : MonoBehaviour
         {
             scoreRight += 1;
             Debug.Log($"Right player scored! {scoreLeft}:{scoreRight}");
+            StartCoroutine(AnimGreen(rightDisplay));
             if (scoreRight >= 11)
             {
                 Debug.Log($"Game Over, Right Paddle Wins! {scoreLeft}:{scoreRight}");
@@ -51,6 +59,11 @@ public class Score : MonoBehaviour
                 StartCoroutine(DisplayWin());
             }
         }
+
+        if (Random.Range(0, 2) == 0)
+            StartCoroutine(SpawnPowerUp(Random.Range(5,10)));
+        else
+            StartCoroutine(SpawnPowerDown(Random.Range(5,10)));
     }
 
     private IEnumerator DisplayWin()
@@ -60,5 +73,25 @@ public class Score : MonoBehaviour
         scoreRight = 0;
         yield return new WaitForSeconds(5);
         winDisplay.SetActive(false);
+    }
+
+    private IEnumerator AnimGreen(GameObject display)
+    {
+        display.GetComponent<TextMeshProUGUI>().color = Color.green;
+        yield return new WaitForSeconds(1);
+        display.GetComponent<TextMeshProUGUI>().color = Color.white;
+    }
+
+    private IEnumerator SpawnPowerUp(int time)
+    {
+        yield return new WaitForSeconds(time);
+        PowerUp.transform.position = new Vector3(10.12f, 0f, 0f);
+        Instantiate(PowerUp);
+    }
+    private IEnumerator SpawnPowerDown(int time)
+    {
+        yield return new WaitForSeconds(time);
+        PowerDown.transform.position = new Vector3(10.12f, 0f, 0f);
+        Instantiate(PowerDown);
     }
 }
